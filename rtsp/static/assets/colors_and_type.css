@@ -1,0 +1,222 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --sand-50:  #FAF7F2;
+  --sand-100: #F3EEE6;
+  --sand-200: #E8E1D4;
+  --sand-300: #D6CDBC;
+
+  --ink-900:  #0B2B3A;
+  --ink-700:  #1F4557;
+  --ink-500:  #4C6B7A;
+  --ink-400:  #7A93A0;
+  --ink-300:  #B4C3CA;
+
+  --aqua-50:   #EBFAF9;
+  --aqua-100:  #CFF2EF;
+  --aqua-200:  #A5E4E0;
+  --aqua-300:  #6FD0CC;
+  --aqua-400:  #3FB5B2;
+  --aqua-500:  #1E8F8F;
+  --aqua-600:  #0F6E73;
+
+  --teal-50:   #E8F3F6;
+  --teal-100:  #C4E0E7;
+  --teal-200:  #8EC4D0;
+  --teal-300:  #5AA1B1;
+  --teal-400:  #2F7E93;
+  --teal-500:  #1E5E73;
+  --teal-600:  #124458;
+
+  --deep-400:  #2C4E64;
+  --deep-500:  #1B3A4E;
+  --deep-600:  #102A3A;
+  --deep-700:  #0A1E2B;
+
+  --ok-400:    #3DB97B;
+  --ok-100:    #D6F0E1;
+  --warn-400:  #E0A94D;
+  --warn-100:  #F6E8CE;
+  --err-400:   #D0594E;
+  --err-100:   #F3D8D4;
+  --info-400:  var(--aqua-400);
+  --info-100:  var(--aqua-100);
+
+  --flow-0:   #E8F3F6;
+  --flow-1:   #A5E4E0;
+  --flow-2:   #6FD0CC;
+  --flow-3:   #3FB5B2;
+  --flow-4:   #2F7E93;
+  --flow-5:   #E0A94D;
+  --flow-6:   #D0594E;
+
+  --font-sans:    'Space Grotesk', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+
+  --text-2xs:  11px;
+  --text-xs:   12px;
+  --text-sm:   13px;
+  --text-base: 15px;
+  --text-md:   17px;
+  --text-lg:   20px;
+  --text-xl:   24px;
+  --text-2xl:  32px;
+  --text-3xl:  44px;
+  --text-4xl:  60px;
+  --text-5xl:  84px;
+
+  --w-light:    300;
+  --w-regular:  400;
+  --w-medium:   500;
+  --w-semibold: 600;
+  --w-bold:     700;
+
+  --lh-tight:   1.1;
+  --lh-snug:    1.25;
+  --lh-normal:  1.5;
+  --lh-loose:   1.7;
+
+  --track-tight: -0.02em;
+  --track-normal: 0;
+  --track-wide:  0.04em;
+  --track-caps:  0.12em;
+
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  --r-xs:  4px;
+  --r-sm:  8px;
+  --r-md:  12px;
+  --r-lg:  16px;
+  --r-xl:  24px;
+  --r-pill: 999px;
+
+  --shadow-xs: 0 1px 2px rgba(11, 43, 58, 0.06);
+  --shadow-sm: 0 2px 6px rgba(11, 43, 58, 0.06), 0 1px 2px rgba(11, 43, 58, 0.04);
+  --shadow-md: 0 6px 18px rgba(11, 43, 58, 0.08), 0 2px 4px rgba(11, 43, 58, 0.04);
+  --shadow-lg: 0 18px 40px rgba(11, 43, 58, 0.10), 0 6px 12px rgba(11, 43, 58, 0.06);
+  --shadow-glow: 0 0 0 4px rgba(63, 181, 178, 0.18);
+  --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+
+  --glass-bg:     rgba(255, 255, 255, 0.55);
+  --glass-bg-dk:  rgba(16, 42, 58, 0.55);
+  --glass-stroke: rgba(255, 255, 255, 0.75);
+  --glass-stroke-dk: rgba(255, 255, 255, 0.08);
+  --glass-blur:   saturate(140%) blur(18px);
+
+  --border-hair:  1px solid rgba(11, 43, 58, 0.08);
+  --border-soft:  1px solid rgba(11, 43, 58, 0.12);
+  --border-firm:  1px solid rgba(11, 43, 58, 0.20);
+  --border-aqua:  1px solid var(--aqua-300);
+
+  --ease-water:    cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring:   cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast:   120ms;
+  --dur-base:   220ms;
+  --dur-slow:   420ms;
+  --dur-ambient: 6s;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  color: var(--ink-900);
+  background: var(--sand-50);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'ss01', 'cv11';
+}
+
+.h-display {
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  font-weight: var(--w-light);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--track-tight);
+  color: var(--ink-900);
+}
+.h-hero {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: var(--w-medium);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--track-tight);
+  color: var(--ink-900);
+}
+.h1 { font-size: var(--text-2xl); font-weight: var(--w-semibold); line-height: var(--lh-snug); letter-spacing: var(--track-tight); color: var(--ink-900); }
+.h2 { font-size: var(--text-xl); font-weight: var(--w-semibold); line-height: var(--lh-snug); color: var(--ink-900); }
+.h3 { font-size: var(--text-md); font-weight: var(--w-semibold); line-height: var(--lh-snug); color: var(--ink-900); }
+.h4 { font-size: var(--text-base); font-weight: var(--w-semibold); line-height: var(--lh-snug); color: var(--ink-900); }
+
+.body      { font-size: var(--text-base); line-height: var(--lh-normal); color: var(--ink-900); }
+.body-sm   { font-size: var(--text-sm);   line-height: var(--lh-normal); color: var(--ink-700); }
+.helper    { font-size: var(--text-sm);   line-height: var(--lh-normal); color: var(--ink-500); }
+
+.eyebrow {
+  font-size: var(--text-2xs);
+  font-weight: var(--w-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--track-caps);
+  color: var(--ink-500);
+}
+
+.code, .mono {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-700);
+}
+
+.readout {
+  font-family: var(--font-mono);
+  font-weight: var(--w-medium);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--track-tight);
+  color: var(--ink-900);
+}
+.readout-xl { font-size: var(--text-5xl); line-height: 1; }
+.readout-lg { font-size: var(--text-4xl); line-height: 1; }
+.readout-md { font-size: var(--text-3xl); line-height: 1; }
+.readout-sm { font-size: var(--text-xl);  line-height: 1; }
+
+.unit {
+  font-family: var(--font-sans);
+  font-size: 0.38em;
+  font-weight: var(--w-medium);
+  letter-spacing: var(--track-wide);
+  text-transform: lowercase;
+  color: var(--ink-500);
+  vertical-align: middle;
+  margin-left: 0.2em;
+}
+
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-stroke);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md), var(--shadow-inset);
+}
+
+.card {
+  background: #fff;
+  border: var(--border-hair);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-sm);
+}

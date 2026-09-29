@@ -1,0 +1,23 @@
+export const S = {
+  currentStep: 1,
+  selectedDurationS: 60,
+  sessionConfig: {},
+  lastStatus: null,
+  recordingStartedAt: null,
+  pollTimer: null,
+  tickTimer: null,
+
+  snapshotImg: null,
+  videoWidth: 0,
+  videoHeight: 0,
+  videoLoaded: false,
+  frameCaptured: false,
+  livePreviewActive: false,
+  gcps: [],
+  pendingGcp: null,
+  editingGcpIndex: -1,
+  originGcpIndex: -1,
+  aoiCorners: [],
+  draggingAoi: -1,
+  aoiDashOffset: 0,
+};

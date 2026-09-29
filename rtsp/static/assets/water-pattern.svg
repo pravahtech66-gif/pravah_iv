@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="wp-fade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FAF7F2" stop-opacity="0"></stop>
+      <stop offset="1" stop-color="#FAF7F2" stop-opacity="1"></stop>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="400" fill="#FAF7F2"></rect>
+  <g stroke="#3FB5B2" stroke-width="1" fill="none" opacity="0.35">
+    <path d="M0,80 Q100,60 200,80 T400,80 T600,80 T800,80"></path>
+    <path d="M0,100 Q100,85 200,100 T400,100 T600,100 T800,100" opacity="0.9"></path>
+    <path d="M0,130 Q120,110 240,130 T480,130 T720,130 T960,130" opacity="0.7"></path>
+    <path d="M0,170 Q140,150 280,170 T560,170 T840,170" opacity="0.55"></path>
+    <path d="M0,220 Q160,195 320,220 T640,220 T960,220" opacity="0.4"></path>
+    <path d="M0,280 Q180,250 360,280 T720,280" opacity="0.28"></path>
+  </g>
+  <rect width="800" height="400" fill="url(#wp-fade)"></rect>
+</svg>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pravah · Stream Mode</title>
+<link rel="stylesheet" href="/static/assets/colors_and_type.css">
+<link rel="stylesheet" href="/static/css/app.css">
+</head>
+<body>
+
+<div class="particles" aria-hidden="true">
+  <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+    <g fill="none" stroke="#3FB5B2" stroke-width="0.15" stroke-linecap="round">
+      <path class="streak" style="animation-duration:28s;animation-delay:0s"   d="M-5 18 Q 20 16, 40 20 T 100 19"/>
+      <path class="streak" style="animation-duration:34s;animation-delay:-6s"  d="M-5 32 Q 25 30, 50 34 T 110 32"/>
+      <path class="streak" style="animation-duration:26s;animation-delay:-12s" d="M-5 48 Q 22 46, 45 49 T 105 47"/>
+      <path class="streak" style="animation-duration:40s;animation-delay:-3s"  d="M-5 64 Q 30 62, 55 65 T 110 63"/>
+      <path class="streak" style="animation-duration:30s;animation-delay:-18s" d="M-5 78 Q 25 76, 50 80 T 110 78"/>
+    </g>
+  </svg>
+</div>
+
+<div class="header">
+  <div class="brand-lockup">
+    <div class="mark">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 8c3 0 3 3 6 3s3-3 6-3 3 3 6 3"/>
+        <path d="M3 14c3 0 3 3 6 3s3-3 6-3 3 3 6 3"/>
+      </svg>
+    </div>
+    <div>
+      <div class="name">pravah</div>
+      <div class="subtitle">stream mode</div>
+    </div>
+  </div>
+  <div class="step-info" id="stepInfo">
+    <span class="pill" id="stepPill">Step 1 of 3</span>
+  </div>
+</div>
+<div class="progress-bar"><div class="fill" id="progressFill" style="width:20%"></div></div>
+
+<div class="step step-page active" id="step1">
+  <div style="text-align:center;margin-bottom:8px;width:100%">
+    <div class="eyebrow" style="justify-content:center;display:flex;">Pravah · Measurement mode</div>
+    <h2 style="font-size:28px;font-weight:600;padding:0;color:var(--ink-900);letter-spacing:-0.02em;margin-top:6px">How are you capturing video?</h2>
+    <p style="margin-top:8px;color:var(--ink-500);font-size:14px">Select the mode that matches your setup.</p>
+  </div>
+  <div class="mode-tiles">
+    <div class="mode-tile tile-static" onclick="window.location.href='/static-mode'">
+      <div class="tile-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
+        </svg>
+      </div>
+      <span class="tile-tag">File upload</span>
+      <h3>Static mode</h3>
+      <p>Upload a pre-recorded video, mark GCPs on the frame, and run the PIV pipeline once.</p>
+    </div>
+    <div class="mode-tile" onclick="showStep(2)">
+      <div class="tile-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5" fill="currentColor" stroke="none"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/>
+        </svg>
+      </div>
+      <span class="tile-tag">Live RTSP</span>
+      <h3>Stream mode</h3>
+      <p>Connect to a live IP camera via RTSP and run PIV continuously on rolling batches.</p>
+    </div>
+  </div>
+</div>
+
+<div class="step step-page" id="step2">
+  <div class="water-card">
+    <div style="padding:28px 32px 0">
+      <div class="eyebrow">Step 1 of 3</div>
+      <h2 style="padding:0">Upload video</h2>
+      <p class="helper">Select a pre-recorded video file. Its first frame is used to mark GCPs.</p>
+    </div>
+    <div style="padding:20px 32px 0;display:flex;flex-direction:column;gap:10px">
+      <div class="field-group">
+        <label for="videoFileInput">Video file</label>
+        <input type="file" id="videoFileInput" accept="video/mp4,video/*" onchange="handleVideoUpload(this)">
+      </div>
+      <div id="videoStatusWrap" style="display:none;margin-top:4px">
+        <span id="videoChip" class="save-chip"></span>
+      </div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-ghost" onclick="showStep(1)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg>
+        Back
+      </button>
+      <button class="btn btn-primary" id="step2Next" disabled onclick="showStep('4a')">
+        Next: Mark GCPs
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="step step1" id="step4a">
+  <div class="frame-container" id="frameContainer4a">
+    <span class="reticle" aria-hidden="true"><span class="tl"></span><span class="tr"></span><span class="bl"></span><span class="br"></span></span>
+    <img id="livePreview" alt="Live camera feed"
+         style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:3;display:none">
+    <div class="frame-empty" id="frameEmpty4a">
+      <div class="iconwrap">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+        </svg>
+      </div>
+      <h3>Loading live feed…</h3>
+      <p>Connecting to camera</p>
+    </div>
+    <canvas id="frameCanvas4a" style="display:none"></canvas>
+    <canvas class="overlay-canvas" id="overlayCanvas4a" style="display:none"></canvas>
+  </div>
+  <div class="side-panel">
+    <div class="eyebrow">Step 2 of 3 — GCP calibration</div>
+    <h2>Mark GCP points</h2>
+
+    <div id="captureSection" style="display:flex;flex-direction:column;gap:12px">
+      <p style="font-size:13px;color:var(--ink-500);line-height:1.6">
+        Live camera feed is shown on the left. When the camera is positioned correctly, click <strong style="color:var(--ink-900)">Capture frame</strong> to freeze the image and begin marking GCP points.
+      </p>
+      <button class="btn btn-primary" id="captureBtn" onclick="captureFrame()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/><path d="M4 8a2 2 0 0 1 2-2h1l2-2h6l2 2h1a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/>
+        </svg>
+        Capture frame
+      </button>
+    </div>
+
+    <div id="gcpSection" style="display:none;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:12px;color:var(--ok-400);font-family:var(--font-mono);font-weight:600">✓ Frame captured</span>
+        <button class="btn btn-sm btn-aqua" onclick="recaptureFrame()">↺ Recapture</button>
+      </div>
+      <div class="counter" id="gcpCounter" data-req="≥ 4 REQUIRED">0 of 4 minimum points placed</div>
+      <div class="gcp-form" id="gcpForm">
+        <div id="gcpFormTitle">Point #1</div>
+        <div id="gcpFormPixel">Pixel: (0, 0)</div>
+        <div id="gcpOriginHint" style="font-size:11px;color:#888;margin-bottom:4px;">
+          Tip: mark one GCP as origin — all distances are measured from it.<br>
+          <span style="font-family:var(--font-mono);">+X</span> right &nbsp;·&nbsp;
+          <span style="font-family:var(--font-mono);">+Y</span> into image &nbsp;·&nbsp;
+          <span style="font-family:var(--font-mono);">+Z</span> up
+        </div>
+        <div class="row">
+          <div><label>X from origin (in)</label><input type="number" step="any" id="gcpX" placeholder="X distance from origin"></div>
+          <div><label>Y from origin (in)</label><input type="number" step="any" id="gcpY" placeholder="Y distance from origin"></div>
+        </div>
+        <div><label>Z (in) — positive up</label><input type="number" step="any" id="gcpZ" placeholder="Height above origin (negative if below)"></div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:4px">
+          <button class="btn btn-sm btn-ghost" id="gcpCancelBtn">Cancel</button>
+          <button class="btn btn-primary btn-sm" id="gcpSaveBtn">Save Point</button>
+        </div>
+      </div>
+      <div class="gcp-list" id="gcpList"></div>
+    </div>
+
+    <div class="nav-bottom">
+      <button class="btn btn-ghost" onclick="showStep(2)">← Back</button>
+      <button class="btn btn-primary" id="gcpNext" disabled onclick="showStep('4b')">Next: Water level →</button>
+    </div>
+  </div>
+</div>
+
+<div class="step step-page" id="step4b">
+  <div class="water-card">
+    <div style="padding:28px 32px 0">
+      <div class="eyebrow">Step 2 of 3 — Geometry</div>
+      <h2 style="padding:0">Camera &amp; water position from origin</h2>
+      <p class="helper">All values are measured from your <strong style="color:var(--ink-900)">chosen origin GCP</strong>. Sign convention: <span style="font-family:var(--font-mono)">+X</span> right · <span style="font-family:var(--font-mono)">+Y</span> into image · <span style="font-family:var(--font-mono)">+Z</span> up.</p>
+    </div>
+
+    <div class="height-fallback-block" style="margin-top:20px">
+      <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-500);margin-bottom:10px;">Camera position from origin (in)</p>
+      <div class="sensor-row">
+        <div class="sensor-field">
+          <label for="camX">X</label>
+          <input type="number" step="any" id="camX" placeholder="0" oninput="updateHaDisplay()">
+        </div>
+        <div class="sensor-field">
+          <label for="camY">Y</label>
+          <input type="number" step="any" id="camY" placeholder="0" oninput="updateHaDisplay()">
+        </div>
+        <div class="sensor-field">
+          <label for="camZ">Z (positive up)</label>
+          <input type="number" step="any" id="camZ" placeholder="0" oninput="updateHaDisplay()">
+        </div>
+      </div>
+    </div>
+
+    <div class="height-fallback-block" style="margin-top:16px">
+      <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-500);margin-bottom:10px;">Water surface elevation from origin (in)</p>
+      <div class="input-unit-wrap">
+        <span class="unit-prefix">in</span>
+        <input type="number" step="any" id="waterZ" placeholder="-80" oninput="updateHaDisplay()">
+      </div>
+      <p style="font-size:12px;color:var(--ink-400);margin-top:4px">Negative if water surface is below origin. Positive if above.</p>
+    </div>
+
+    <div class="sensor-divider"></div>
+    <div style="padding:0 32px">
+      <div class="sensor-toggle-row">
+        <div class="sensor-toggle-left">
+          <span class="sensor-toggle-label">Use external distance sensor</span>
+          <span class="sensor-toggle-sub">Modbus RTU / TCP · read once at session start · overrides manual input</span>
+        </div>
+        <button class="sensor-toggle-btn" id="sensorToggle" role="switch" aria-checked="false" aria-label="Enable external distance sensor" onclick="toggleSensor()">
+          <span class="sensor-toggle-thumb"></span>
+        </button>
+      </div>
+      <div class="sensor-panel" id="sensorPanel">
+        <div class="sensor-row">
+          <div class="sensor-field">
+            <label for="sProtocol">Protocol</label>
+            <select id="sProtocol" onchange="onProtocolChange()">
+              <option value="modbus_rtu">Modbus RTU (RS-485 / serial)</option>
+              <option value="modbus_tcp">Modbus TCP (Ethernet / WiFi)</option>
+            </select>
+          </div>
+        </div>
+        <div class="sensor-row" id="sRtuRow">
+          <div class="sensor-field"><label for="sComPort">COM Port</label><input type="text" id="sComPort" placeholder="COM3" spellcheck="false"></div>
+          <div class="sensor-field">
+            <label for="sBaud">Baud Rate</label>
+            <select id="sBaud"><option value="9600" selected>9600</option><option value="19200">19200</option><option value="38400">38400</option><option value="57600">57600</option><option value="115200">115200</option></select>
+          </div>
+          <div class="sensor-field sensor-field-sm">
+            <label for="sParity">Parity</label>
+            <select id="sParity"><option value="N" selected>None</option><option value="E">Even</option><option value="O">Odd</option></select>
+          </div>
+        </div>
+        <div class="sensor-row" id="sTcpRow" style="display:none">
+          <div class="sensor-field sensor-field-grow"><label for="sTcpHost">IP Address</label><input type="text" id="sTcpHost" placeholder="192.168.1.100" spellcheck="false"></div>
+          <div class="sensor-field sensor-field-sm"><label for="sTcpPort">Port</label><input type="number" id="sTcpPort" value="502" min="1" max="65535"></div>
+        </div>
+        <div class="sensor-row">
+          <div class="sensor-field sensor-field-sm"><label for="sSlaveId">Slave ID</label><input type="number" id="sSlaveId" value="1" min="1" max="247"></div>
+          <div class="sensor-field">
+            <label for="sRegType">Register Type</label>
+            <select id="sRegType"><option value="holding">Holding (FC 03)</option><option value="input">Input (FC 04)</option></select>
+          </div>
+          <div class="sensor-field"><label for="sAddress">Register Address</label><input type="text" id="sAddress" placeholder="0" spellcheck="false"></div>
+        </div>
+        <div class="sensor-row">
+          <div class="sensor-field"><label for="sScale">Scale Factor</label><input type="number" id="sScale" step="any" value="0.1" placeholder="0.1"></div>
+          <div class="sensor-field sensor-field-sm">
+            <label for="sUnit">Unit</label>
+            <select id="sUnit"><option value="cm" selected>cm</option><option value="mm">mm</option><option value="m">m</option></select>
+          </div>
+        </div>
+        <div class="sensor-action-row">
+          <button class="btn btn-sm sensor-test-btn" onclick="testSensor()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            Test Connection
+          </button>
+          <span class="sensor-test-status" id="sensorTestStatus">—</span>
+        </div>
+      </div>
+      <div class="height-source-divider" style="margin:16px 0 12px"><span>FALLBACK IF SENSOR UNAVAILABLE</span></div>
+      <div style="font-family:var(--font-mono);font-size:13px;color:var(--aqua-600);padding:8px 14px;background:var(--aqua-50);border:1px solid var(--aqua-200);border-radius:8px;margin-bottom:4px" id="haFallbackDisplay">Water surface elevation = —</div>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-ghost" onclick="showStep('4a')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg>
+        Back
+      </button>
+      <button class="btn btn-primary" onclick="showStep('4c')">
+        Next: Define AOI
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="step step3" id="step4c">
+  <div class="frame-container" id="frameContainer4c">
+    <span class="reticle" aria-hidden="true"><span class="tl"></span><span class="tr"></span><span class="bl"></span><span class="br"></span></span>
+    <div class="aoi-readout" id="aoiReadout" style="display:none">
+      <div class="title">AOI</div>
+      <div class="row"><span class="k">corners</span><span class="v"><span id="aoiReadoutN">0</span>/4</span></div>
+    </div>
+    <canvas id="frameCanvas4c"></canvas>
+    <canvas class="overlay-canvas" id="overlayCanvas4c"></canvas>
+  </div>
+  <div style="padding:10px 22px;background:rgba(255,255,255,0.92);backdrop-filter:blur(12px);border-top:1px solid rgba(11,43,58,0.06);display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+    <span class="pipeline-bar-label">Pipeline</span>
+    <span style="display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--aqua-200);border-radius:999px;padding:5px 14px;font-family:var(--font-mono);font-size:12px;color:var(--aqua-600);box-shadow:var(--shadow-xs)">quasi-v2 (Bodart 2024)</span>
+  </div>
+  <div class="step3-bar">
+    <span class="instruction" id="aoiInstruction">Click 4 corners of the water surface area. Order: top-left, top-right, bottom-right, bottom-left.</span>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-ghost" onclick="showStep('4b')" style="background:#fff;color:var(--ink-700);border:1px solid rgba(11,43,58,0.12)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg>
+        Back
+      </button>
+      <button class="btn btn-primary" id="aoiNext" disabled onclick="startStream()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5v14l11-7Z"/></svg>
+        Run analysis
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="step" id="step6">
+  <div class="water-card" style="max-width:1100px;margin:0 auto">
+    <div style="padding:28px 32px 0">
+      <div class="eyebrow">Step 3 of 3 — Results</div>
+      <h2 style="padding:0">PIV analysis</h2>
+    </div>
+    <div style="padding:16px 32px 28px;display:flex;flex-direction:column;gap:16px">
+      <div id="staticStatus" style="font-family:var(--font-mono);font-size:13px;color:var(--aqua-600)">Idle</div>
+
+      <div id="resultsContainer" style="display:flex;flex-direction:column;gap:16px"></div>
+
+      <div class="nav">
+        <button class="btn btn-ghost" onclick="location.reload()">&larr; Run another video</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="/static/js/static_mode/main.js"></script>
+</body>
+</html>
