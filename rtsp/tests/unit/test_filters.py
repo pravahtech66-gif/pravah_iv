@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 import xarray as xr
 
-from piv.filters import filter_velocity_field, quality_filter_piv
+from piv.filters import apply_spatial_coherence_filter, filter_velocity_field, quality_filter_piv
 
 
 def test_removes_zero_noise_and_spike_cells_leaves_others_untouched():
@@ -211,3 +211,59 @@ def test_missing_only_s2n_also_skips_masking():
 
     assert out is ds
     assert "skipping quality mask" in job_state["log"][0]
+
+
+def _reference_median_test_2d(field, threshold, eps):
+    from scipy.ndimage import generic_filter
+    nan_mask = np.isnan(field)
+    filled = field.copy()
+    filled[nan_mask] = float(np.nanmedian(field)) if not np.all(nan_mask) else 0.0
+    footprint = np.ones((3, 3), dtype=bool)
+    u_med = generic_filter(filled, np.median, footprint=footprint, mode="nearest")
+    r_med = generic_filter(filled, lambda v: np.median(np.abs(v - np.median(v))),
+                           footprint=footprint, mode="nearest")
+    return (np.abs(filled - u_med) / (r_med + eps) > threshold) & ~nan_mask
+
+
+def _random_piv_dataset(rng, n_times, rows, cols):
+    v_x = rng.normal(0.5, 0.05, (n_times, rows, cols))
+    v_y = rng.normal(0.0, 0.05, (n_times, rows, cols))
+    v_x[rng.random(v_x.shape) < 0.05] = 5.0
+    v_y[rng.random(v_y.shape) < 0.05] = -4.0
+    v_x[rng.random(v_x.shape) < 0.15] = np.nan
+    v_x[:, 0, 0] = 9.0
+    v_y[:, -1, -1] = -9.0
+    dims = ("time", "y", "x")
+    return xr.Dataset({"v_x": (dims, v_x), "v_y": (dims, v_y)})
+
+
+@pytest.mark.parametrize("seed", [0, 1, 2])
+def test_spatial_coherence_matches_scipy_generic_filter_reference(seed):
+    rng = np.random.default_rng(seed)
+    ds = _random_piv_dataset(rng, n_times=4, rows=9, cols=13)
+    vx_in = ds["v_x"].values.copy()
+    vy_in = ds["v_y"].values.copy()
+    expected_vx = vx_in.copy()
+    expected_vy = vy_in.copy()
+    for t in range(vx_in.shape[0]):
+        outlier = (_reference_median_test_2d(vx_in[t], 2.0, 0.1)
+                   | _reference_median_test_2d(vy_in[t], 2.0, 0.1))
+        expected_vx[t][outlier] = np.nan
+        expected_vy[t][outlier] = np.nan
+
+    out = apply_spatial_coherence_filter({}, ds)
+
+    np.testing.assert_array_equal(out["v_x"].values, expected_vx)
+    np.testing.assert_array_equal(out["v_y"].values, expected_vy)
+    assert np.isnan(expected_vx).sum() > np.isnan(vx_in).sum()
+
+
+def test_spatial_coherence_handles_all_nan_timestep():
+    ds = xr.Dataset({
+        "v_x": (("time", "y", "x"), np.full((1, 3, 3), np.nan)),
+        "v_y": (("time", "y", "x"), np.full((1, 3, 3), np.nan)),
+    })
+
+    out = apply_spatial_coherence_filter({}, ds)
+
+    assert np.isnan(out["v_x"].values).all()
