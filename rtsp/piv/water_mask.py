@@ -19,7 +19,7 @@ def restrict_grid_to_water(
     job_state: dict,
 ) -> object:
     try:
-        first_frame = frames_proj.values[0] if hasattr(frames_proj, "values") else frames_proj[0]
+        first_frame = frames_proj[0].values if hasattr(frames_proj, "values") else frames_proj[0]
         water_mask = compute_water_mask(first_frame)
 
         piv_h = piv_ds["v_x"].shape[-2] if piv_ds["v_x"].ndim > 2 else piv_ds["v_x"].shape[0]

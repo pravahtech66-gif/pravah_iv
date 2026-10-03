@@ -481,7 +481,11 @@ upstream/downstream marking required.
   orthorectified frame's non-NaN mask (NaN = outside the AOI after projection) resized to PIV grid
   resolution with nearest-neighbour interpolation. Purpose: "prevents fake near-zero velocities
   from contaminating the average" — land/vegetation cells would otherwise pull the mean toward
-  zero.
+  zero. It reads the first frame as `frames_proj[0].values`, never `frames_proj.values[0]`:
+  `frames_proj` is a lazy dask-backed array, and `.values` on the whole array decodes and
+  orthorectifies **every** frame of the clip just to keep one. On the Rishikesh Day 2 clip
+  (2592×1944, 101 frames) that hidden recompute cost ~6 s on a 16-thread i5-12500H and far more
+  on 4 slow cores; the first frame is identical either way.
 - `compute_sa_from_spots` (P₂, quasi-automated mode only): computes the PIV searching-area size
   from manually spotted particle displacements. Paper formula: `SA_downstream = 2 ×
   max_streamwise_displacement`, `SA_spanwise = 2 × max_spanwise_displacement`, `SA_upstream = 1`
@@ -521,7 +525,17 @@ timestep**, before time-averaging): for each vector, compare it to the median of
 normalize the residual by the neighbours' own residual-median (`+ epsilon` to avoid divide-by-zero);
 flag as outlier when the normalized residual exceeds `residual_threshold` (default `2.0`). The
 `_median_test_2d_fast` implementation deliberately replaced an earlier "pure-Python triple nested
-loop" (O(rows×cols×9) per timestep) with `scipy.ndimage.generic_filter`, which "runs fully in C".
+loop" (O(rows×cols×9) per timestep) with `scipy.ndimage.generic_filter`, on the belief that it
+"runs fully in C". It does not when the filter function is a Python callable: `generic_filter`
+calls back into Python once per cell, so the median test cost ~780k Python calls per run (two
+filters × two velocity components × every cell × every timestep) — 10.7 s of a 34.5 s run on the
+Rishikesh Day 2 clip, single-threaded. It now builds every cell's 3×3 neighbourhood at once with
+`sliding_window_view` over an edge-padded field (`np.pad(..., mode="edge")` is what
+`generic_filter`'s `mode="nearest"` did) and takes the medians with vectorised `np.median`.
+Same arithmetic, same outliers: `test_spatial_coherence_matches_scipy_generic_filter_reference`
+pins it against the old `generic_filter` implementation. Note the neighbourhood is the full 3×3
+block **including the centre vector** (9 values), as it always was in code — not the "8
+neighbours" of the textbook median test described above.
 
 `_compute_adaptive_quality_thresholds`: derives `corr_min`/`s2n_min` from the **actual PIV output
 distribution** for this run rather than using fixed constants — "fixed thresholds ... may be too

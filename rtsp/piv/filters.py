@@ -74,7 +74,7 @@ def apply_spatial_coherence_filter(
     epsilon: float = 0.1,
 ) -> object:
     try:
-        from scipy.ndimage import generic_filter
+        from numpy.lib.stride_tricks import sliding_window_view
 
         def _median_test_2d_fast(field: np.ndarray, threshold: float, eps: float) -> np.ndarray:
             nan_mask = np.isnan(field)
@@ -82,16 +82,14 @@ def apply_spatial_coherence_filter(
             global_med = float(np.nanmedian(field)) if not np.all(nan_mask) else 0.0
             field_filled[nan_mask] = global_med
 
-            footprint = np.ones((3, 3), dtype=bool)
+            padded_field = np.pad(field_filled, 1, mode="edge")
+            neighbourhood_values = sliding_window_view(padded_field, (3, 3)).reshape(field_filled.shape + (9,))
 
-            u_med = generic_filter(field_filled, np.median, footprint=footprint, mode="nearest")
+            u_med = np.median(neighbourhood_values, axis=-1)
 
             r_i = np.abs(field_filled - u_med)
 
-            def _residual_med(values):
-                return np.median(np.abs(values - np.median(values)))
-
-            r_med = generic_filter(field_filled, _residual_med, footprint=footprint, mode="nearest")
+            r_med = np.median(np.abs(neighbourhood_values - u_med[..., None]), axis=-1)
 
             r_norm = r_i / (r_med + eps)
 
